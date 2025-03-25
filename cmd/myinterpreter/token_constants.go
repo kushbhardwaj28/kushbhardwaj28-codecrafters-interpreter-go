@@ -57,7 +57,7 @@ var TokenTypeName = map[TokenType]string{
     TokenType_DOT: "DOT",
     TokenType_MINUS: "MINUS",
     TokenType_PLUS: "PLUS",
-    TokenType_SEMICOLON: "SEMICOLOR",
+    TokenType_SEMICOLON: "SEMICOLON",
     TokenType_SLASH: "SLASH",
     TokenType_STAR: "STAR",
 
@@ -77,7 +77,7 @@ var TokenTypeName = map[TokenType]string{
     TokenType_AND: "AND",
     TokenType_CLASS: "CLASS",
     TokenType_ELSE: "ELSE",
-    TokenType_FALSE: "FLASE",
+    TokenType_FALSE: "FALSE",
     TokenType_FUN: "FUN",
     TokenType_FOR: "FOR",
     TokenType_IF: "IF",
