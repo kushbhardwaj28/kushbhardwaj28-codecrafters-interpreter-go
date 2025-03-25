@@ -73,7 +73,8 @@ func (s *Scanner) scanToken() {
         s.addToken(TokenType_STAR); 
         break;
     default:
-        fmt.Printf("Warning: Unexpected character '%s' at line %d\n", c, s.line)
+        hasError = true;
+        _logger._Error(fmt.Sprintf("[line %d] Error: Unexpected character: %s", s.line, c));
     }
 }
 

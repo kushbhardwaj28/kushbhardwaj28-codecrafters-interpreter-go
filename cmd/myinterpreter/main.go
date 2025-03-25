@@ -5,11 +5,14 @@ import (
 	"os"
 )
 
+var hasError bool = false
+var _logger = NewLogger();
+
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Fprintln(os.Stderr, "Logs from your program will appear here!")
 
-    if len(os.Args) < 3 {
+	if len(os.Args) < 3 {
 		fmt.Fprintln(os.Stderr, "Usage: ./your_program.sh tokenize <filename>")
 		os.Exit(1)
 	}
@@ -31,12 +34,15 @@ func main() {
 	}
 
 	if len(fileContents) > 0 {
-        var scanner = *NewScanner(string(fileContents));
-        scanner.scanTokens();
-        for _, t := range scanner.tokens {
-            fmt.Println(t.String())
-        }
+		var scanner = *NewScanner(string(fileContents))
+		scanner.scanTokens()
+		for _, t := range scanner.tokens {
+			fmt.Println(t.String())
+		}
 	} else {
 		fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
+	}
+	if hasError {
+		os.Exit(65)
 	}
 }
