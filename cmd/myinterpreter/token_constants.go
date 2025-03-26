@@ -62,7 +62,7 @@ var TokenTypeName = map[TokenType]string{
 	TokenType_STAR:        "STAR",
 
 	TokenType_BANG:          "BANG",
-	TokenType_BANG_EQUAL:    "BAND_EQUAL",
+	TokenType_BANG_EQUAL:    "BANG_EQUAL",
 	TokenType_EQUAL:         "EQUAL",
 	TokenType_EQUAL_EQUAL:   "EQUAL_EQUAL",
 	TokenType_GREATER:       "GREATER",
