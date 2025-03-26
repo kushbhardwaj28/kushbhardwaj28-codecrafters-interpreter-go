@@ -6,7 +6,7 @@ import (
 )
 
 var hasError bool = false
-var _logger = NewLogger();
+var _logger = NewLogger()
 
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.

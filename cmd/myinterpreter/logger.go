@@ -6,22 +6,21 @@ import (
 )
 
 type ILoxLogger interface {
-    Info(message string);
-    debug(message string);
-    _Error(message string);
+	Info(message string)
+	debug(message string)
+	_Error(message string)
 }
 
-type LoxLogger struct {}
+type LoxLogger struct{}
 
 func (logger *LoxLogger) Info(message string) {
-    fmt.Fprintln(os.Stdin, message);
+	fmt.Fprintln(os.Stdin, message)
 }
 
 func (logger *LoxLogger) _Error(message string) {
-    fmt.Fprintln(os.Stderr, message);
+	fmt.Fprintln(os.Stderr, message)
 }
 
 func NewLogger() *LoxLogger {
-    return &LoxLogger{};
+	return &LoxLogger{}
 }
-
