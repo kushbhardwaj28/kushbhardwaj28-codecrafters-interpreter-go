@@ -15,6 +15,7 @@ type Scanner struct {
 }
 
 func NewScanner(source string) *Scanner {
+	// fmt.Println(fmt.Sprintf("scanner source: %v", source))
 	return &Scanner{
 		source:  source,
 		tokens:  []Token{},
@@ -50,6 +51,9 @@ func (s *Scanner) scanToken() {
 		} else {
 			s.addToken(_type)
 		}
+	} else if c == "\n" {
+		s.line++
+	} else if c == " " || c == "\t" {
 	} else {
 		hasError = true
 		_logger._Error(fmt.Sprintf("[line %d] Error: Unexpected character: %s", s.line, c))
@@ -67,6 +71,7 @@ func (s *Scanner) advance() string {
 		return ""
 	}
 	var substr = string([]rune(s.source)[s.current])
+	//fmt.Println(fmt.Sprintf("current substr: %s, s.current: %d", substr, s.current))
 	s.current++
 
 	return substr
