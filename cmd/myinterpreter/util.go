@@ -15,4 +15,3 @@ func getMutliLexem(oldType TokenType, addType TokenType) TokenType {
 		return TokenType_EOF
 	}
 }
-

@@ -98,7 +98,7 @@ func (s *Scanner) peek() string {
 	if s.isAtEnd() {
 		return "\n"
 	}
-    var substr = string([]rune(s.source)[s.current])
+	var substr = string([]rune(s.source)[s.current])
 	return substr
 }
 
