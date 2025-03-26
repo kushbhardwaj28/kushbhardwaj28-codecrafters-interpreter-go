@@ -41,6 +41,22 @@ func (s Scanner) isAtEnd() bool {
 
 func (s *Scanner) scanToken() {
     var c string = s.advance();
+
+    if _type, exists := SymbolTokenType[c]; exists {
+        var containsMultiLexemes = Contains(MultiCharLexemes, _type);
+        if containsMultiLexemes && s.match(TokenType_EQUAL) {
+            s.addToken(getMutliLexem(_type, TokenType_EQUAL));
+        } else {
+            s.addToken(_type);
+        }
+    } else {
+        hasError = true;
+        _logger._Error(fmt.Sprintf("[line %d] Error: Unexpected character: %s", s.line, c));
+    }
+}
+
+func (s *Scanner) _scanToken() {
+    var c string = s.advance();
     switch(c) {
     case "(": 
         s.addToken(TokenType_LEFT_PAREN); 
@@ -58,7 +74,7 @@ func (s *Scanner) scanToken() {
         s.addToken(TokenType_COMMA); 
         break;
     case ".": 
-        s.addToken(TokenType_DOT); 
+        s.addToken(TokenType_DOT);
         break;
     case "-": 
         s.addToken(TokenType_MINUS); 
@@ -69,7 +85,7 @@ func (s *Scanner) scanToken() {
     case ";": 
         s.addToken(TokenType_SEMICOLON); 
         break;
-    case "*": 
+    case "*":
         s.addToken(TokenType_STAR); 
         break;
     default:
@@ -92,5 +108,28 @@ func (s *Scanner) addToken(_type TokenType) {
 func (s *Scanner) _addToken(_type TokenType, literal any) {
     var text string = s.source[s.start:s.current];
     s.tokens = append(s.tokens, *NewToken(_type, text, literal, s.line));
+}
+
+func (s *Scanner) match(expectedType TokenType) bool {
+    if s.isAtEnd() {
+        return false;
+    }
+    var substr = string([]rune(s.source)[s.current]);
+    if(SymbolTokenType[substr] != expectedType) {
+        return false;
+    }
+    
+    s.current++;
+    return true;
+}
+
+func getMutliLexem(oldType TokenType, addType TokenType) TokenType {
+    var newCharStr = TokenTypeSymbol[oldType] + TokenTypeSymbol[addType];
+
+    if _type, exists := SymbolTokenType[newCharStr]; exists {
+        return _type;
+    } else {
+        return TokenType_EOF;
+    }
 }
 
