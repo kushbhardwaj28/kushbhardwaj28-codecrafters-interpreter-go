@@ -35,7 +35,7 @@ func (s *Scanner) scanTokens() []Token {
 }
 
 func (s Scanner) isAtEnd() bool {
-	return s.current >= len(s.source)
+	return s.current >= len([]rune(s.source))
 }
 
 func (s *Scanner) scanToken() {
@@ -45,6 +45,8 @@ func (s *Scanner) scanToken() {
 		var containsMultiLexemes = Contains(MultiCharLexemes, _type)
 		if containsMultiLexemes && s.match(TokenType_EQUAL) {
 			s.addToken(getMutliLexem(_type, TokenType_EQUAL))
+		} else if _type == TokenType_SLASH && s.match(TokenType_SLASH) {
+			s.HandleComment()
 		} else {
 			s.addToken(_type)
 		}
@@ -52,6 +54,52 @@ func (s *Scanner) scanToken() {
 		hasError = true
 		_logger._Error(fmt.Sprintf("[line %d] Error: Unexpected character: %s", s.line, c))
 	}
+}
+
+func (s *Scanner) HandleComment() {
+	for s.peek() != "\n" && !s.isAtEnd() {
+		s.advance()
+	}
+}
+
+func (s *Scanner) advance() string {
+	if s.isAtEnd() {
+		return ""
+	}
+	var substr = string([]rune(s.source)[s.current])
+	s.current++
+
+	return substr
+}
+
+func (s *Scanner) addToken(_type TokenType) {
+	s._addToken(_type, nil)
+}
+
+func (s *Scanner) _addToken(_type TokenType, literal any) {
+	var text string = s.source[s.start:s.current]
+	s.tokens = append(s.tokens, *NewToken(_type, text, literal, s.line))
+}
+
+func (s *Scanner) match(expectedType TokenType) bool {
+	if s.isAtEnd() {
+		return false
+	}
+	var substr = string([]rune(s.source)[s.current])
+	if SymbolTokenType[substr] != expectedType {
+		return false
+	}
+
+	s.current++
+	return true
+}
+
+func (s *Scanner) peek() string {
+	if s.isAtEnd() {
+		return "\n"
+	}
+    var substr = string([]rune(s.source)[s.current])
+	return substr
 }
 
 func (s *Scanner) _scanToken() {
@@ -90,44 +138,5 @@ func (s *Scanner) _scanToken() {
 	default:
 		hasError = true
 		_logger._Error(fmt.Sprintf("[line %d] Error: Unexpected character: %s", s.line, c))
-	}
-}
-
-func (s *Scanner) advance() string {
-	var substr = string([]rune(s.source)[s.current])
-	s.current++
-
-	return substr
-}
-
-func (s *Scanner) addToken(_type TokenType) {
-	s._addToken(_type, nil)
-}
-
-func (s *Scanner) _addToken(_type TokenType, literal any) {
-	var text string = s.source[s.start:s.current]
-	s.tokens = append(s.tokens, *NewToken(_type, text, literal, s.line))
-}
-
-func (s *Scanner) match(expectedType TokenType) bool {
-	if s.isAtEnd() {
-		return false
-	}
-	var substr = string([]rune(s.source)[s.current])
-	if SymbolTokenType[substr] != expectedType {
-		return false
-	}
-
-	s.current++
-	return true
-}
-
-func getMutliLexem(oldType TokenType, addType TokenType) TokenType {
-	var newCharStr = TokenTypeSymbol[oldType] + TokenTypeSymbol[addType]
-
-	if _type, exists := SymbolTokenType[newCharStr]; exists {
-		return _type
-	} else {
-		return TokenType_EOF
 	}
 }

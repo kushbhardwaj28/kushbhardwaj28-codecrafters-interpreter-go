@@ -182,4 +182,4 @@ var TokenTypeSymbol = map[TokenType]string{
 	TokenType_WHILE:  "while",
 }
 
-var MultiCharLexemes = []TokenType{TokenType_BANG, TokenType_LESS, TokenType_GREATER, TokenType_EQUAL}
+var MultiCharLexemes = []TokenType{ TokenType_BANG, TokenType_LESS, TokenType_GREATER, TokenType_EQUAL }
